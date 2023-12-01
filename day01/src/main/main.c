@@ -67,11 +67,11 @@ void solve_problem(char * input_file_name,
 
 void setup_calibrations_amended(required_information ri,
     char * input_file_name) {
-  char tmp_buffer[MAX_CALIBRATION_SIZE] = {0};
+  char tmp_buf[MAX_CALIBRATION_SIZE] = {0};
 
   FILE * input_file = fopen(input_file_name, "r");
 
-  while(fgets(tmp_buffer, MAX_CALIBRATION_SIZE, input_file)) {
+  while(fgets(tmp_buf, MAX_CALIBRATION_SIZE, input_file)) {
     ri->qty_of_calibrations++;
     if(!(ri->calibrations_amended)) {
       ri->calibrations_amended = calloc(1, sizeof(char *));
@@ -80,14 +80,14 @@ void setup_calibrations_amended(required_information ri,
           ri->qty_of_calibrations * sizeof(char *));
     }
 
-    ri->calibrations_amended[ri->qty_of_calibrations - 1]
-      = calloc(strnlen(tmp_buffer, MAX_CALIBRATION_SIZE), sizeof(char));
+    size_t tmp_buf_len = strnlen(tmp_buf, MAX_CALIBRATION_SIZE);
+    ri->calibrations_amended[ri->qty_of_calibrations - 1] = calloc(tmp_buf_len,
+        sizeof(char));
 
-    strncpy(ri->calibrations_amended[ri->qty_of_calibrations - 1], tmp_buffer,
-        strnlen(tmp_buffer, MAX_CALIBRATION_SIZE));
+    strncpy(ri->calibrations_amended[ri->qty_of_calibrations - 1], tmp_buf,
+        tmp_buf_len);
     // We want '\n' => '\0' for str* functions
-    ri->calibrations_amended[ri->qty_of_calibrations - 1]
-      [strnlen(tmp_buffer, MAX_CALIBRATION_SIZE) - 1] = '\0';
+    ri->calibrations_amended[ri->qty_of_calibrations - 1][tmp_buf_len - 1] = '\0';
   }
 
   fclose(input_file);
