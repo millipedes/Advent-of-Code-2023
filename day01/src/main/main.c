@@ -99,6 +99,7 @@ char is_valid_number(int strings_on, char c, ...) {
 
   char * maybe_string = va_arg(args, char *);
 
+  // ascii for '0' is 48 and ascii for '9' is 57
   if((int)c >= 48 && (int)c <= 57) {
     return c;
   } else if(strings_on) {
@@ -112,7 +113,6 @@ char is_valid_number(int strings_on, char c, ...) {
 char determine_first_number(char * string, char validator(int, char, ...),
     int strings_on) {
   for(int i = 0; i < (int)strnlen(string, MAX_CALIBRATION_SIZE); i++) {
-    // ascii for '0' is 48 and ascii for '9' is 57
     if(strings_on) {
       if(validator(strings_on, string[i], string + i))
         return validator(strings_on, string[i], string + i);
@@ -129,7 +129,6 @@ char determine_first_number(char * string, char validator(int, char, ...),
 char determine_last_number(char * string, char validator(int, char, ...),
     int strings_on) {
   for(int i = (int)strnlen(string, MAX_CALIBRATION_SIZE) - 1; i >= 0; i--) {
-    // ascii for '0' is 48 and ascii for '9' is 57
     if(strings_on) {
       if(validator(strings_on, string[i], string + i))
         return validator(strings_on, string[i], string + i);
