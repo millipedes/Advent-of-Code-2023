@@ -64,5 +64,5 @@ Adding these together produces 281.
 
 What is the sum of all of the calibration values?
 
-Both parts of this puzzle are complete! They provide two gold stars: :star:
+Both parts of this puzzle are complete! They provide two gold stars :star:
 :star:
