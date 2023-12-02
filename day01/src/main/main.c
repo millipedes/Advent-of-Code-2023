@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdarg.h>
 
 #define MAX_CALIBRATION_SIZE 1024
 
@@ -13,17 +12,17 @@ typedef struct REQUIRED_INFO_T {
 } * required_information;
 
 void solve_problem(char * input_file_name,
-    char first_number(char *, char(int, char, ...), int),
-    char last_number(char *, char(int, char, ...), int), int strings_on);
+    char first_number(char *, char(int, char, char *), int),
+    char last_number(char *, char(int, char, char *), int), int strings_on);
 
 void setup_calibrations_amended(required_information ri,
     char * input_file_name);
 
-char determine_first_number(char * string, char validator(int, char, ...),
+char determine_first_number(char * string, char validator(int, char, char *),
     int strings_on);
-char determine_last_number(char * string, char validator(int, char, ...),
+char determine_last_number(char * string, char validator(int, char, char *),
     int strings_on);
-char is_valid_number(int strings_on, char c, ...);
+char is_valid_number(int strings_on, char c, char *);
 
 char string_to_int(char * string);
 
@@ -42,8 +41,8 @@ int main(int argc, char *argv[]) {
 }
 
 void solve_problem(char * input_file_name,
-    char first_number(char *, char(int, char, ...), int),
-    char last_number(char *, char(int, char, ...), int), int strings_on) {
+    char first_number(char *, char(int, char, char *), int),
+    char last_number(char *, char(int, char, char *), int), int strings_on) {
   required_information ri = calloc(1, sizeof(struct REQUIRED_INFO_T));
 
   setup_calibrations_amended(ri, input_file_name);
@@ -93,12 +92,7 @@ void setup_calibrations_amended(required_information ri,
   fclose(input_file);
 }
 
-char is_valid_number(int strings_on, char c, ...) {
-  va_list args;
-  va_start(args, c);
-
-  char * maybe_string = va_arg(args, char *);
-
+char is_valid_number(int strings_on, char c, char * maybe_string) {
   // ascii for '0' is 48 and ascii for '9' is 57
   if((int)c >= 48 && (int)c <= 57) {
     return c;
@@ -106,19 +100,18 @@ char is_valid_number(int strings_on, char c, ...) {
     if(string_to_int(maybe_string) != '\0')
       return string_to_int(maybe_string);
   }
-  va_end(args);
   return 0;
 }
 
-char determine_first_number(char * string, char validator(int, char, ...),
+char determine_first_number(char * string, char validator(int, char, char *),
     int strings_on) {
   for(int i = 0; i < (int)strnlen(string, MAX_CALIBRATION_SIZE); i++) {
     if(strings_on) {
       if(validator(strings_on, string[i], string + i))
         return validator(strings_on, string[i], string + i);
     } else {
-      if(validator(strings_on, string[i]))
-        return validator(strings_on, string[i]);
+      if(validator(strings_on, string[i], NULL))
+        return validator(strings_on, string[i], NULL);
     }
   }
   fprintf(stderr, "[DETERMINE_FIRST_NUMBER]: No Number for Calibration "
@@ -126,15 +119,15 @@ char determine_first_number(char * string, char validator(int, char, ...),
   exit(1);
 }
 
-char determine_last_number(char * string, char validator(int, char, ...),
+char determine_last_number(char * string, char validator(int, char, char *),
     int strings_on) {
   for(int i = (int)strnlen(string, MAX_CALIBRATION_SIZE) - 1; i >= 0; i--) {
     if(strings_on) {
       if(validator(strings_on, string[i], string + i))
         return validator(strings_on, string[i], string + i);
     } else {
-      if(validator(strings_on, string[i]))
-        return validator(strings_on, string[i]);
+      if(validator(strings_on, string[i], NULL))
+        return validator(strings_on, string[i], NULL);
     }
   }
   fprintf(stderr, "[DETERMINE_LAST_NUMBER]: No Number for Calibration "

@@ -16,7 +16,7 @@ vim:
 	nvim $(CFILES) 
 
 run:
-	$(EXEFILE)
+	$(EXEFILE) $(INPUTFILE)
 
 debug:
 	gdb -q $(EXEFILE)
